@@ -59,9 +59,9 @@ class sfMailer extends Swift_Mailer
     $options = array_merge(array(
       'charset' => 'UTF-8',
       'logging' => false,
-      'delivery_strategy' => 'realtime',
+      'delivery_strategy' => self::REALTIME,
       'transport' => array(
-        'class' => 'Swift_MailTransport',
+        'class' => Swift_SendmailTransport::class,
         'param' => array(),
        ),
     ), $options);
@@ -97,6 +97,11 @@ class sfMailer extends Swift_Mailer
         }
       }
     }
+
+    if (sfMailer::NONE == $this->strategy) {
+      $transport = new Swift_NullTransport();
+    }
+
     $this->realtimeTransport = $transport;
 
     if (sfMailer::SPOOL == $this->strategy)
@@ -139,12 +144,6 @@ class sfMailer extends Swift_Mailer
       $this->logger = new sfMailerMessageLoggerPlugin($dispatcher);
 
       $transport->registerPlugin($this->logger);
-    }
-
-    if (sfMailer::NONE == $this->strategy)
-    {
-      // must be registered after logging
-      $transport->registerPlugin(new Swift_Plugins_BlackholePlugin());
     }
 
     // preferences
@@ -240,7 +239,7 @@ class sfMailer extends Swift_Mailer
    */
   public function compose($from = null, $to = null, $subject = null, $body = null)
   {
-    return Swift_Message::newInstance()
+    return (new Swift_Message())
       ->setFrom($from)
       ->setTo($to)
       ->setSubject($subject)
@@ -283,7 +282,7 @@ class sfMailer extends Swift_Mailer
    *
    * @return int|false The number of sent emails
    */
-  public function send(Swift_Mime_Message $message, &$failedRecipients = null)
+  public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null)
   {
     if ($this->force)
     {
