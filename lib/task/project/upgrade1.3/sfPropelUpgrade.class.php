@@ -125,7 +125,7 @@ class sfPropelUpgrade extends sfUpgrade
     {
       $this->logBlock(array_merge(
         array(sprintf('Please %s or upgrade the following propel.ini directive(s):', $insert ? 'insert' : 'remove'), ''),
-        array_map(create_function('$v', 'return \' - \'.$v;'), $failures)
+        array_map(function ($v) {return ' - '.$v; }, $failures)
       ), 'ERROR_LARGE');
     }
 
