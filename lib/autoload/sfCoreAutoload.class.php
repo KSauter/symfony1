@@ -9,11 +9,6 @@
  */
 
 /**
- * The current symfony version.
- */
-define('SYMFONY_VERSION', '1.3.19');
-
-/**
  * sfCoreAutoload class.
  *
  * This class is a singleton as PHP seems to be unable to register 2 autoloaders that are instances
@@ -22,8 +17,7 @@ define('SYMFONY_VERSION', '1.3.19');
  * @package    symfony
  * @subpackage autoload
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfCoreAutoload.class.php 32413 2011-03-30 15:52:28Z Kris.Wallsmith
- $
+ * @version    SVN: $Id: sfCoreAutoload.class.php 32413 2011-03-30 15:52:28Z Kris.Wallsmith $
  */
 class sfCoreAutoload
 {

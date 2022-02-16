@@ -107,12 +107,14 @@ class sfCommandManager
     }
     else if (!is_array($arguments))
     {
-      // hack to split arguments with spaces : --test="with some spaces"
-      $arguments = preg_replace_callback('/(\'|")(.+?)\\1/', function ($match) {
-        return str_replace(' ', '=PLACEHOLDER=', $match[2]);
-      }, $arguments);
-      $arguments = preg_split('/\s+/', $arguments);
-      $arguments = str_replace('=PLACEHOLDER=', ' ', $arguments);
+        // hack to split arguments with spaces : --test="with some spaces"
+        $arguments = preg_replace_callback(
+            '/(\'|")(.+?)\\1/',
+            function ($matches) {
+                return str_replace(' ', '=PLACEHOLDER=', $matches[2]);
+            }, $arguments);
+        $arguments = preg_split('/\s+/', $arguments);
+        $arguments = str_replace('=PLACEHOLDER=', ' ', $arguments);
     }
 
     $this->arguments            = $arguments;

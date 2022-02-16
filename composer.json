@@ -35,5 +35,10 @@
       "/lib/test/w3",
       "/lib/**/test/**"
     ]
+  },
+  "scripts": {
+    "post-install-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths vendor/phpcompatibility/php-compatibility",
+    "post-update-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths vendor/phpcompatibility/php-compatibility",
+    "php-7-compat-check": "vendor/bin/phpcs -p lib/ --standard=PHPCompatibility --runtime-set testVersion 7.1-7.4 --parallel=8"
   }
 }
