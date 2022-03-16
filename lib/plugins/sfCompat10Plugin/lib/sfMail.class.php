@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use PHPMailer\PHPMailer\PHPMailer;
+
 /**
  *
  * sfMail class.
@@ -23,9 +25,6 @@ class sfMail
 
   public function __construct()
   {
-    require_once(dirname(__FILE__).'/vendor/phpmailer/class.phpmailer.php');
-    require_once(dirname(__FILE__).'/vendor/phpmailer/class.smtp.php');
-
     $this->mailer = new PHPMailer();
   }
 
