@@ -47,7 +47,15 @@ class sfFormsUpgrade extends sfUpgrade
       $changed = $count || $changed;
 
       // change signature of sfFormDoctrine::processValues()
-      $contents = preg_replace('/public\s+function\s+processValues\s*\(\s*\$\w+(\s*=\s*null\s*)\)/ie', "str_replace('$1', '', '$0')", $contents, -1, $count);
+        $contents = preg_replace_callback(
+          '/public\s+function\s+processValues\s*\(\s*\$\w+(\s*=\s*null\s*)\)/i',
+          function ($matches) {
+              return str_replace($matches[1], '', $matches[0]);
+          },
+          $contents,
+          -1,
+          $count
+        );
       $changed = $count || $changed;
 
       if ($changed)

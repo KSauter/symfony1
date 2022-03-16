@@ -27,8 +27,16 @@ class sfInflector
    */
   public static function camelize($lower_case_and_underscored_word)
   {
+    $tmp = $lower_case_and_underscored_word;
+    $tmp = preg_replace_callback('#/(.?)#', function($matches){
+      return '::' . strtoupper($matches[1]);
+    }, $tmp);
 
-    return strtr(ucwords(strtr($lower_case_and_underscored_word, array('/' => '::', '_' => ' ', '-' => ' ', '.' => '_ '))), array(' ' => ''));
+    $tmp = preg_replace_callback('/(^|_|-)+(.)/', function($matches){
+      return strtoupper($matches[2]);
+    }, $tmp);
+
+    return $tmp;
   }
 
   /**

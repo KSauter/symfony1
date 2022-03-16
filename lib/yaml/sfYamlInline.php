@@ -8,8 +8,6 @@
  * file that was distributed with this source code.
  */
 
-require_once dirname(__FILE__).'/sfYaml.php';
-
 /**
  * sfYamlInline implements a YAML parser/dumper for the YAML inline syntax.
  *
@@ -135,7 +133,9 @@ class sfYamlInline
     if (
       (1 == count($keys) && '0' == $keys[0])
       ||
-      (count($keys) > 1 && array_reduce($keys, create_function('$v,$w', 'return (integer) $v + $w;'), 0) == count($keys) * (count($keys) - 1) / 2))
+        (count($keys) > 1 && array_reduce($keys, static function ($v, $w) {
+              return (integer) $v + $w;
+          }, 0) == count($keys) * (count($keys) - 1) / 2))
     {
       $output = array();
       foreach ($value as $val)
@@ -406,8 +406,13 @@ class sfYamlInline
         return true;
       case in_array(strtolower($scalar), $falseValues):
         return false;
+      // Treat as INT even if preceded by negative sign
+      case preg_match('/^-(\d+)$/', $scalar, $matches):
+        return -intval($matches[1]);
       case is_numeric($scalar):
         return '0x' == $scalar[0].$scalar[1] ? hexdec($scalar) : floatval($scalar);
+      case preg_match('/^0x(\d+)$/', $scalar, $matches):
+        return hexdec($matches[1]);
       case 0 == strcasecmp($scalar, '.inf'):
       case 0 == strcasecmp($scalar, '.NaN'):
         return -log(0);
